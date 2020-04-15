@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -87,73 +86,59 @@ public class CompanyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Company> createEmployee(@RequestBody Company company){
-        if(canCreateCompany(company)){
-            companyList.add(company);
+        if(selectCompanyById(company.getCompanyId()) != null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{
+            companyList.add(company);
             return new ResponseEntity<>(company, HttpStatus.CREATED);
         }
     }
 
 
-
-    private boolean canCreateCompany(Company companyForChecking){
-        Company company = companyList.stream()
-                .filter(existCompany -> existCompany.getCompanyId() == companyForChecking.getCompanyId())
-                .findAny().orElse(null);
-
-        if(company != null){
-            return false;
-        }
-        return true;
+    private Company selectCompanyById(int id){
+        Company selectedCompany =  companyList.stream()
+                .filter(company -> company.getCompanyId() == id)
+                .findFirst()
+                .orElse(null);
+        return selectedCompany;
     }
+
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Employee> updateEmployee(@PathVariable int id,
-                                                   @RequestParam(required = false) String name,
-                                                   @RequestParam(required = false) Integer age,
-                                                   @RequestParam(required = false) String gender,
-                                                   @RequestParam(required = false) Integer salary){
+    public ResponseEntity<Company> updateCompany(@PathVariable int id,
+                                                   @RequestParam(required = false) String companyName,
+                                                   @RequestParam(required = false) Integer employeesNumber,
+                                                   @RequestParam(required = false) List<Employee> employeeList){
 
-        Employee selectedEmployee = employeeList.stream()
-                .filter(employee -> employee.getId() == id)
-                .findFirst()
-                .orElse(null);
+        Company selectedCompany =  selectCompanyById(id);
 
-        if(selectedEmployee == null){
+        if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        if(name != null){
-            selectedEmployee.setName(name);
+        if(companyName != null){
+            selectedCompany.setCompanyName(companyName);
         }
-        if(age != null){
-            selectedEmployee.setAge(age);
+        if(employeesNumber != null){
+            selectedCompany.setEmployeesNumber(employeesNumber);
         }
-        if(gender != null){
-            if(gender.toUpperCase().equals(MALE.toUpperCase())
-                || gender.toUpperCase().equals(FEMALE.toUpperCase())){
-                selectedEmployee.setGender(gender);
-            }
+        if(employeeList != null){
+            selectedCompany.setEmployeeList(employeeList);
         }
-        if(salary != null){
-            selectedEmployee.setSalary(salary);
-        }
-        return new ResponseEntity<>(selectedEmployee, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Employee> removeEmployee(@PathVariable int id){
-        Employee selectedEmployee = employeeList.stream()
-                .filter(employee -> employee.getId() == id)
-                .findFirst()
-                .orElse(null);
+    public ResponseEntity<Company> removeEmployee(@PathVariable int id){
 
-        if(selectedEmployee != null){
-            employeeList.remove(selectedEmployee);
-            return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
+        Company selectedCompany =  selectCompanyById(id);
+
+        if(selectedCompany != null){
+            companyList.remove(selectedCompany);
+            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

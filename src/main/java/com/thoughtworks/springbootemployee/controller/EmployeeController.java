@@ -54,13 +54,15 @@ public class EmployeeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee){
-        if(canCreateEmployee(employee)){
-            employeeList.add(employee);
+        if(selectEmployeeById(employee.getId()) != null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{
+            employeeList.add(employee);
             return new ResponseEntity<>(employee, HttpStatus.CREATED);
         }
     }
+
+
 
     @PostMapping("/init")
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,15 +75,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList, HttpStatus.CREATED);
     }
 
-    private boolean canCreateEmployee(Employee employeeForChecking){
+    private Employee selectEmployeeById(int id){
         Employee employee = employeeList.stream()
-                .filter(existEmployee -> existEmployee.getId() == employeeForChecking.getId())
+                .filter(existEmployee -> existEmployee.getId() == id)
                 .findAny().orElse(null);
-
-        if(employee != null){
-            return false;
-        }
-        return true;
+        return employee;
     }
 
     @PutMapping("/{id}")
@@ -92,10 +90,7 @@ public class EmployeeController {
                                                    @RequestParam(required = false) String gender,
                                                    @RequestParam(required = false) Integer salary){
 
-        Employee selectedEmployee = employeeList.stream()
-                .filter(employee -> employee.getId() == id)
-                .findFirst()
-                .orElse(null);
+        Employee selectedEmployee = selectEmployeeById(id);
 
         if(selectedEmployee == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -116,24 +111,19 @@ public class EmployeeController {
         if(salary != null){
             selectedEmployee.setSalary(salary);
         }
-        return new ResponseEntity<>(selectedEmployee, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Employee> removeEmployee(@PathVariable int id){
-        Employee selectedEmployee = employeeList.stream()
-                .filter(employee -> employee.getId() == id)
-                .findFirst()
-                .orElse(null);
+        Employee selectedEmployee = selectEmployeeById(id);
 
-        if(selectedEmployee != null){
+        if(selectedEmployee == null){
             employeeList.remove(selectedEmployee);
-            return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-
+        return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
     }
 
 }
