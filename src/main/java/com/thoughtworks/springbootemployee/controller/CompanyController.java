@@ -30,8 +30,8 @@ public class CompanyController {
 
         companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
 
-        companyList.add(new Company("alibaba", 200, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 200, companyTwoEmployeeList));
+        companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
 
         return new ResponseEntity<>(companyList, HttpStatus.CREATED);
     }
@@ -47,27 +47,14 @@ public class CompanyController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Employee>> getAllEmployee(@RequestParam(required = false) Integer page,
-                                                         @RequestParam(required = false) Integer pageSize,
-                                                         @RequestParam(required = false) String gender
+    public ResponseEntity<List<Company>> getAllCompany(
+//            @RequestParam(required = false) Integer page,
+//                                                         @RequestParam(required = false) Integer pageSize,
+//                                                         @RequestParam(required = false) String gender
                                          ){
-        List<Employee> returnList = new ArrayList<>(employeeList);
-
-        if(gender != null){
-            returnList = returnList.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
-            if(returnList.size() == 0){
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        if(page != null && pageSize != null){
-            try{
-                return new ResponseEntity<>(returnList.subList(page * pageSize, pageSize * pageSize + pageSize), HttpStatus.OK);
-            }catch(IndexOutOfBoundsException expcetion){
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
-        }
+        List<Company> returnList = new ArrayList<>(companyList);
         return new ResponseEntity<>(returnList, HttpStatus.OK);
+        
     }
 
     @PostMapping
