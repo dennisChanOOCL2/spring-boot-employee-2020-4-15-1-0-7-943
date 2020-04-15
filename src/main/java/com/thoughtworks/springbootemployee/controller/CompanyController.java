@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/companies")
 public class CompanyController {
     public static final String MALE = "male";
     public static final String FEMALE = "female";
+    private List<Company> companyList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
-
-
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -65,13 +65,20 @@ public class CompanyController {
 
     @PostMapping("/init")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<Employee>> createEmployeeForTesting(){
-        employeeList.add(new Employee(0,"Xiaoming", 20, MALE));
-        employeeList.add(new Employee(1,"Xiaohong", 19, FEMALE));
-        employeeList.add(new Employee(2,"Xiaozhi", 15, MALE));
-        employeeList.add(new Employee(3,"Xiaogang", 16, MALE));
-        employeeList.add(new Employee(4,"Xiaoxia", 15, FEMALE));
-        return new ResponseEntity<>(employeeList, HttpStatus.CREATED);
+    public ResponseEntity<List<Company>> createEmployeeForTesting(){
+
+        List<Employee> companyOneEmployeeList = new ArrayList<>();
+        List<Employee> companyTwoEmployeeList = new ArrayList<>();
+
+        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, MALE, 6000));
+        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, FEMALE, 7000));
+
+        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
+
+        companyList.add(new Company("alibaba", 200, companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 200, companyTwoEmployeeList));
+
+        return new ResponseEntity<>(companyList, HttpStatus.CREATED);
     }
 
     private boolean canCreateEmployee(Employee employeeForChecking){
