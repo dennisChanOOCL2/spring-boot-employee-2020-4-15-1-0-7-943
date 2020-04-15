@@ -5,6 +5,7 @@ import java.util.List;
 public class Company {
     private String companyName;
     private int employeesNumber;
+    private int companyId;
     private List<Employee> employeeList;
 
     public Company(String companyName, int employeesNumber, List employeeList){
@@ -35,5 +36,13 @@ public class Company {
 
     public void setEmployeeList(List<Employee> employeeList) {
         this.employeeList = employeeList;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 }

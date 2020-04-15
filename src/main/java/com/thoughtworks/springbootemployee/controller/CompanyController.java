@@ -18,11 +18,29 @@ public class CompanyController {
     private List<Company> companyList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
 
+    @PostMapping("/init")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<List<Company>> createEmployeeForTesting(){
+
+        List<Employee> companyOneEmployeeList = new ArrayList<>();
+        List<Employee> companyTwoEmployeeList = new ArrayList<>();
+
+        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, MALE, 6000));
+        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, FEMALE, 7000));
+
+        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
+
+        companyList.add(new Company("alibaba", 200, companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 200, companyTwoEmployeeList));
+
+        return new ResponseEntity<>(companyList, HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Employee> getSpecificEmployee(@PathVariable int id){
-        return new ResponseEntity<>(employeeList.stream()
-                .filter(employee -> employee.getId() == id)
+    public ResponseEntity<Company> getSpecificCompany(@PathVariable int id){
+        return new ResponseEntity<>(companyList.stream()
+                .filter(company -> company.getCompanyId() == id)
                 .findFirst()
                 .orElse(null), HttpStatus.BAD_REQUEST);
     }
@@ -63,23 +81,7 @@ public class CompanyController {
         }
     }
 
-    @PostMapping("/init")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<Company>> createEmployeeForTesting(){
 
-        List<Employee> companyOneEmployeeList = new ArrayList<>();
-        List<Employee> companyTwoEmployeeList = new ArrayList<>();
-
-        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, MALE, 6000));
-        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, FEMALE, 7000));
-
-        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
-
-        companyList.add(new Company("alibaba", 200, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 200, companyTwoEmployeeList));
-
-        return new ResponseEntity<>(companyList, HttpStatus.CREATED);
-    }
 
     private boolean canCreateEmployee(Employee employeeForChecking){
         Employee employee = employeeList.stream()
