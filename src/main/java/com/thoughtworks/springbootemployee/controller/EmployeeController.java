@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
@@ -27,16 +28,26 @@ public class EmployeeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Employee>> getAllEmployee(@RequestParam(required = false) Integer page,
-                                         @RequestParam(required = false) Integer pageSize
+                                                         @RequestParam(required = false) Integer pageSize,
+                                                         @RequestParam(required = false) String gender
                                          ){
+        List<Employee> returnList = new ArrayList<>(employeeList);
+
+        if(gender != null){
+            returnList = returnList.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+            if(returnList.size() == 0){
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        }
+
         if(page != null && pageSize != null){
             try{
-                return new ResponseEntity<>(employeeList.subList(page * pageSize, pageSize * pageSize + pageSize), HttpStatus.OK);
+                return new ResponseEntity<>(returnList.subList(page * pageSize, pageSize * pageSize + pageSize), HttpStatus.OK);
             }catch(IndexOutOfBoundsException expcetion){
                 return new ResponseEntity<>(null, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+        return new ResponseEntity<>(returnList, HttpStatus.OK);
     }
 
     @PostMapping
