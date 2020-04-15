@@ -26,11 +26,17 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getAllEmployee(@RequestParam(required = false) Integer page,
+    public ResponseEntity<List<Employee>> getAllEmployee(@RequestParam(required = false) Integer page,
                                          @RequestParam(required = false) Integer pageSize
                                          ){
-
-        return employeeList;
+        if(page != null && pageSize != null){
+            try{
+                return new ResponseEntity<>(employeeList.subList(page * pageSize, pageSize * pageSize + pageSize), HttpStatus.OK);
+            }catch(IndexOutOfBoundsException expcetion){
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
     @PostMapping
@@ -46,13 +52,13 @@ public class EmployeeController {
 
     @PostMapping("/init")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee createEmployeeForTesting(@RequestBody Employee employee){
+    public ResponseEntity<List<Employee>> createEmployeeForTesting(){
         employeeList.add(new Employee(0,"Xiaoming", 20, "Male"));
         employeeList.add(new Employee(1,"Xiaohong", 19, "Female"));
         employeeList.add(new Employee(2,"Xiaozhi", 15, "Male"));
         employeeList.add(new Employee(3,"Xiaogang", 16, "Male"));
         employeeList.add(new Employee(4,"Xiaoxia", 15, "Female"));
-        return employee;
+        return new ResponseEntity<>(employeeList, HttpStatus.CREATED);
     }
 
     private boolean canCreateEmployee(Employee employeeForChecking){
