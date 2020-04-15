@@ -24,4 +24,12 @@ public class EmployeeController {
         return employeeList;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee createEmployee(@RequestBody Employee employee){
+        employeeList.add(employee);
+        return employee;
+    }
+
+
 }
