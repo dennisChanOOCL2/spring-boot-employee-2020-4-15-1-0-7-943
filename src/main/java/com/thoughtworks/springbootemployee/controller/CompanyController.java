@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class CompanyController {
     public static final String FEMALE = "female";
     private List<Company> companyList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
+    private CommonUtils commonUtils = new CommonUtils();
 
     @PostMapping("/init")
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,25 +38,50 @@ public class CompanyController {
         return new ResponseEntity<>(companyList, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}/employees")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<Employee>> getEmployeesForSpecificCompany(@PathVariable int id){
+        Company selectedCompany =  companyList.stream()
+                .filter(company -> company.getCompanyId() == id)
+                .findFirst()
+                .orElse(null);
+
+        if(selectedCompany == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(selectedCompany.getEmployeeList(), HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> getSpecificCompany(@PathVariable int id){
-        return new ResponseEntity<>(companyList.stream()
+        Company selectedCompany =  companyList.stream()
                 .filter(company -> company.getCompanyId() == id)
                 .findFirst()
-                .orElse(null), HttpStatus.BAD_REQUEST);
+                .orElse(null);
+
+        if(selectedCompany == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
+        }
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Company>> getAllCompany(
-//            @RequestParam(required = false) Integer page,
-//                                                         @RequestParam(required = false) Integer pageSize,
-//                                                         @RequestParam(required = false) String gender
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer pageSize
                                          ){
         List<Company> returnList = new ArrayList<>(companyList);
+        returnList = commonUtils.pagingForList(returnList, page, pageSize);
+        if(returnList == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(returnList, HttpStatus.OK);
-        
+
     }
 
     @PostMapping

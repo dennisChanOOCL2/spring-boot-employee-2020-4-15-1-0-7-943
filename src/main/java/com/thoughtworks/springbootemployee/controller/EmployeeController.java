@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class EmployeeController {
     public static final String MALE = "male";
     public static final String FEMALE = "female";
     private List<Employee> employeeList = new ArrayList<>();
-
+    private CommonUtils commonUtils = new CommonUtils();
 
 
     @GetMapping("/{id}")
@@ -42,14 +43,12 @@ public class EmployeeController {
             }
         }
 
-        if(page != null && pageSize != null){
-            try{
-                return new ResponseEntity<>(returnList.subList(page * pageSize, pageSize * pageSize + pageSize), HttpStatus.OK);
-            }catch(IndexOutOfBoundsException expcetion){
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
+        if(commonUtils.pagingForList(returnList, page, pageSize) == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(returnList, HttpStatus.OK);
+
+        return new ResponseEntity<>(commonUtils.pagingForList(returnList, page, pageSize), HttpStatus.OK);
+
     }
 
     @PostMapping
