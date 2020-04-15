@@ -5,6 +5,15 @@ public class Employee {
     private String name;
     private int age;
     private String gender;
+    private int salary;
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
 
     public Employee(int id, String name, int age, String gender){
         this.id = id;
