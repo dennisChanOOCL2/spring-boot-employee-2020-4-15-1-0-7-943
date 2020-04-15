@@ -86,23 +86,23 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee){
-        if(canCreateEmployee(employee)){
-            employeeList.add(employee);
+    public ResponseEntity<Company> createEmployee(@RequestBody Company company){
+        if(canCreateCompany(company)){
+            companyList.add(company);
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>(employee, HttpStatus.CREATED);
+            return new ResponseEntity<>(company, HttpStatus.CREATED);
         }
     }
 
 
 
-    private boolean canCreateEmployee(Employee employeeForChecking){
-        Employee employee = employeeList.stream()
-                .filter(existEmployee -> existEmployee.getId() == employeeForChecking.getId())
+    private boolean canCreateCompany(Company companyForChecking){
+        Company company = companyList.stream()
+                .filter(existCompany -> existCompany.getCompanyId() == companyForChecking.getCompanyId())
                 .findAny().orElse(null);
 
-        if(employee != null){
+        if(company != null){
             return false;
         }
         return true;
