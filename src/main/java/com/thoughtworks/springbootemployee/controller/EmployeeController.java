@@ -12,6 +12,15 @@ import java.util.List;
 public class EmployeeController {
     private List<Employee> employeeList = new ArrayList<>();
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee getSpecificEmployee(@PathVariable int id){
+        return employeeList.stream()
+                .filter(employee -> employee.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee(){
