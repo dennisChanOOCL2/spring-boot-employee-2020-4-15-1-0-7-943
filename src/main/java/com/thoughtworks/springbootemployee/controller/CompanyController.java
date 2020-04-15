@@ -132,7 +132,7 @@ public class CompanyController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Company> removeEmployee(@PathVariable int id){
+    public ResponseEntity<Company> removeCompany(@PathVariable int id){
 
         Company selectedCompany =  selectCompanyById(id);
 
