@@ -26,4 +26,8 @@ public class CompanyService {
     public List<Company> getAll(Integer page, Integer pageSize) {
         return repository.findAll(page, pageSize);
     }
+
+    public Company createCompany(Company company) {
+        return repository.addCompany(company);
+    }
 }

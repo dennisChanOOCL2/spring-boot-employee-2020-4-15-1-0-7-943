@@ -68,12 +68,15 @@ public class CompanyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Company> createCompany(@RequestBody Company company){
-        if(selectCompanyById(company.getCompanyId()) != null){
+
+        Company companyToBeCreated = companyService.createCompany(company);
+
+        if(companyToBeCreated == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }else{
-            companyList.add(company);
-            return new ResponseEntity<>(company, HttpStatus.CREATED);
         }
+
+        return new ResponseEntity<>(company, HttpStatus.CREATED);
+
     }
 
 

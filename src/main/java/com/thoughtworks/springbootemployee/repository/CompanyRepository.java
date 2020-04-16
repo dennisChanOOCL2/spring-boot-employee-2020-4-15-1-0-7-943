@@ -52,4 +52,12 @@ public class CompanyRepository {
         return returnList;
     }
 
+    public Company addCompany(Company companyToBeCreated) {
+        if(findCompanyByCompanyId(companyToBeCreated.getCompanyId()) != null){
+            return null;
+        }else{
+            companyList.add(companyToBeCreated);
+            return companyToBeCreated;
+        }
+    }
 }
