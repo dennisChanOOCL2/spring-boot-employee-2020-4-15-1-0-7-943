@@ -13,11 +13,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +26,9 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 @SpringBootTest
 public class EmployeeControllerTest {
 
-    @Autowired
-    private EmployeeController employeeController;
-
     @Before
     public void setUp(){
+        EmployeeController employeeController = new EmployeeController();
         RestAssuredMockMvc.standaloneSetup(employeeController);
     }
 
@@ -64,7 +60,7 @@ public class EmployeeControllerTest {
 
         Employee employee = response.getBody().as(Employee.class);
         Assert.assertEquals(1, employee.getId());
-        Assert.assertEquals("Xiaoming", employee.getName());
+        Assert.assertEquals("Xiaohong", employee.getName());
     }
 
     @Test
@@ -129,39 +125,30 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldUpdateEmployee(){
-        Employee newAddEmployee = new Employee();
-        newAddEmployee.setId(1);
-        newAddEmployee.setName("Dennis");
-
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .body(newAddEmployee)
+                .param("name","DennisTesting")
                 .when()
-                .put("/employees");
+                .put("/employees/1");
 
-        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
         Employee employee = response.getBody().as(Employee.class);
 
-        Assert.assertEquals(newAddEmployee.getName(),employee.getName());
-        Assert.assertEquals(newAddEmployee.getId(), employee.getId());
+        Assert.assertEquals("DennisTesting",employee.getName());
     }
 
     @Test
     public void shouldDeleteEmployee(){
-        Employee newAddEmployee = new Employee();
-        newAddEmployee.setId(10);
-        newAddEmployee.setName("Dennis");
 
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .body(newAddEmployee)
                 .when()
-                .post("/employees");
+                .delete("/employees/1");
 
-        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
         Employee employee = response.getBody().as(Employee.class);
 
-        Assert.assertEquals(newAddEmployee.getName(),employee.getName());
-        Assert.assertEquals(newAddEmployee.getId(), employee.getId());
+        Assert.assertEquals("Xiaohong",employee.getName());
+
     }
 }
