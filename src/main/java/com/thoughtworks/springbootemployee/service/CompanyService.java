@@ -40,4 +40,15 @@ public class CompanyService {
         return repository.updateCompany(selectedCompany, companyName, employeeList);
 
     }
+
+    public Company removeCompany(int companyId) {
+        Company selectedCompany = repository.findCompanyByCompanyId(companyId);
+        if(selectedCompany == null){
+            return null;
+        }
+        if (!repository.removeCompany(selectedCompany)){
+            return null;
+        }
+        return selectedCompany;
+    }
 }

@@ -92,7 +92,7 @@ public class CompanyController {
         if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        
+
         return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }
 
@@ -100,7 +100,7 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> removeCompany(@PathVariable int companyId){
 
-        Company selectedCompany =  selectCompanyById(companyId);
+        Company selectedCompany =  companyService.removeCompany(companyId);
 
         if(selectedCompany != null){
             companyList.remove(selectedCompany);

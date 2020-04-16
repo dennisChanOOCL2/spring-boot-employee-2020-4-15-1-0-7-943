@@ -12,19 +12,17 @@ import java.util.stream.Collectors;
 
 @Repository
 public class EmployeeRepository {
-    private static final String MALE = "male";
-    private static final String FEMALE = "female";
 
     private List<Employee> employeeList = new ArrayList<>();
 
     private CommonUtils commonUtils = new CommonUtils();
 
     public EmployeeRepository(){
-        employeeList.add(new Employee(0,"Xiaoming", 20, MALE));
-        employeeList.add(new Employee(1,"Xiaohong", 19, FEMALE));
-        employeeList.add(new Employee(2,"Xiaozhi", 15, MALE));
-        employeeList.add(new Employee(3,"Xiaogang", 16, MALE));
-        employeeList.add(new Employee(4,"Xiaoxia", 15, FEMALE));
+        employeeList.add(new Employee(0,"Xiaoming", 20, CommonUtils.MALE));
+        employeeList.add(new Employee(1,"Xiaohong", 19, CommonUtils.FEMALE));
+        employeeList.add(new Employee(2,"Xiaozhi", 15, CommonUtils.MALE));
+        employeeList.add(new Employee(3,"Xiaogang", 16, CommonUtils.MALE));
+        employeeList.add(new Employee(4,"Xiaoxia", 15, CommonUtils.FEMALE));
     }
 
     public List<Employee> findAll(Integer page, Integer pageSize, String gender){
@@ -70,8 +68,8 @@ public class EmployeeRepository {
             selectedEmployee.setAge(age);
         }
         if(gender != null){
-            if(gender.toUpperCase().equals(MALE.toUpperCase())
-                    || gender.toUpperCase().equals(FEMALE.toUpperCase())){
+            if(gender.toUpperCase().equals(CommonUtils.MALE.toUpperCase())
+                    || gender.toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
                 selectedEmployee.setGender(gender);
             }
         }

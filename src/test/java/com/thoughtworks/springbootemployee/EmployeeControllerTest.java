@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee;
 
+import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -12,33 +13,50 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EmployeeControllerTest {
 
-    EmployeeRepository employeeRepository = new EmployeeRepository();
-    EmployeeService employeeService = new EmployeeService(employeeRepository);
-    EmployeeController employeeController = new EmployeeController(employeeService);
+    public List<Employee> employeeList = new ArrayList<>();
+    public Employee employee = new Employee();
+
+    @Mock
+    private EmployeeService employeeService;
 
     @Before
     public void setUp(){
+        EmployeeController employeeController = new EmployeeController(employeeService);
         RestAssuredMockMvc.standaloneSetup(employeeController);
+
+        employeeList.add(new Employee(0,"Xiaoming", 20, CommonUtils.MALE));
+        employeeList.add(new Employee(1,"Xiaohong", 19, CommonUtils.FEMALE));
+        employeeList.add(new Employee(2,"Xiaozhi", 15, CommonUtils.MALE));
+        employeeList.add(new Employee(3,"Xiaogang", 16, CommonUtils.MALE));
+        employeeList.add(new Employee(4,"Xiaoxia", 15, CommonUtils.FEMALE));
+
+        employee.setId(1);
+        employee.setName("Xiaohong");
+
     }
 
     @Test
     public void shouldFindAllEmployee(){
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
+        doReturn(employeeList).when(employeeService).getAll(null,null,null);
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
                 .get("/employees");
@@ -51,13 +69,15 @@ public class EmployeeControllerTest {
                 return super.getType();
             }
         });
+
         Assert.assertEquals(5, employees.size());
         Assert.assertEquals("Xiaoming", employees.get(0).getName());
     }
 
     @Test
     public void shouldFindEmployeeById(){
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
+        doReturn(employee).when(employeeService).getSpecificEmployee(1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/employees/1");
@@ -71,7 +91,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldFindEmployeeByGender() {
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .params("gender", "male")
                 .when()
@@ -91,8 +111,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldFindEmployeeByPaging() {
-        RestAssuredMockMvc.standaloneSetup(employeeController);
-        Map paramsMap = new HashMap();
+
+        Map<String, Integer> paramsMap = new HashMap();
         paramsMap.put("page", 1);
         paramsMap.put("pageSize",1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
@@ -114,7 +134,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldAddEmployee(){
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
         Employee newAddEmployee = new Employee();
         newAddEmployee.setId(10);
         newAddEmployee.setName("Dennis");
@@ -134,7 +154,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldUpdateEmployee(){
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .param("name","DennisTesting")
                 .when()
@@ -149,7 +169,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldDeleteEmployee(){
-        RestAssuredMockMvc.standaloneSetup(employeeController);
+
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
                 .delete("/employees/1");

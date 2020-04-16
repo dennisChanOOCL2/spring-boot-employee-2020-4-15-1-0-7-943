@@ -5,6 +5,9 @@ import java.util.List;
 
 public class CommonUtils {
 
+    public static final String MALE = "male";
+    public static final String FEMALE = "female";
+
     public List pagingForList(List inputList, Integer page, Integer pageSize) {
 
         List returnList = new ArrayList<>(inputList);
