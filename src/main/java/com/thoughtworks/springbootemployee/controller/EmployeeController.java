@@ -18,6 +18,14 @@ public class EmployeeController {
     private List<Employee> employeeList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
+    public EmployeeController(){
+        employeeList.add(new Employee(0,"Xiaoming", 20, MALE));
+        employeeList.add(new Employee(1,"Xiaohong", 19, FEMALE));
+        employeeList.add(new Employee(2,"Xiaozhi", 15, MALE));
+        employeeList.add(new Employee(3,"Xiaogang", 16, MALE));
+        employeeList.add(new Employee(4,"Xiaoxia", 15, FEMALE));
+    }
+
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +45,9 @@ public class EmployeeController {
         List<Employee> returnList = new ArrayList<>(employeeList);
 
         if(gender != null){
-            returnList = returnList.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+            returnList = returnList.stream()
+                    .filter(employee -> employee.getGender().toUpperCase().equals(gender.toUpperCase()))
+                    .collect(Collectors.toList());
             if(returnList.size() == 0){
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
@@ -60,19 +70,6 @@ public class EmployeeController {
             employeeList.add(employee);
             return new ResponseEntity<>(employee, HttpStatus.CREATED);
         }
-    }
-
-
-
-    @PostMapping("/init")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<Employee>> createEmployeeForTesting(){
-        employeeList.add(new Employee(0,"Xiaoming", 20, MALE));
-        employeeList.add(new Employee(1,"Xiaohong", 19, FEMALE));
-        employeeList.add(new Employee(2,"Xiaozhi", 15, MALE));
-        employeeList.add(new Employee(3,"Xiaogang", 16, MALE));
-        employeeList.add(new Employee(4,"Xiaoxia", 15, FEMALE));
-        return new ResponseEntity<>(employeeList, HttpStatus.CREATED);
     }
 
     private Employee selectEmployeeById(int id){

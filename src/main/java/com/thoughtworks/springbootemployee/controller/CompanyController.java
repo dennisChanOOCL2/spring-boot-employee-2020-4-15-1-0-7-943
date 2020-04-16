@@ -19,10 +19,7 @@ public class CompanyController {
     private List<Employee> employeeList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
-    @PostMapping("/init")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<Company>> createEmployeeForTesting(){
-
+    public CompanyController(){
         List<Employee> companyOneEmployeeList = new ArrayList<>();
         List<Employee> companyTwoEmployeeList = new ArrayList<>();
 
@@ -33,8 +30,6 @@ public class CompanyController {
 
         companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
         companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
-
-        return new ResponseEntity<>(companyList, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/employees")
