@@ -3,7 +3,6 @@ package com.thoughtworks.springbootemployee;
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.TypeRef;
@@ -23,8 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringRunner.class)
@@ -91,7 +92,10 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldFindEmployeeByGender() {
-
+        employeeList = employeeList.stream()
+                .filter(employeeElement -> employeeElement.getGender().equals(CommonUtils.MALE))
+                .collect(Collectors.toList());
+        doReturn(employeeList).when(employeeService).getAll(null,null,"male");
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .params("gender", "male")
                 .when()
@@ -112,9 +116,14 @@ public class EmployeeControllerTest {
     @Test
     public void shouldFindEmployeeByPaging() {
 
+        employeeList = employeeList.subList(0,1);
+
+        doReturn(employeeList).when(employeeService).getAll(1,1,null);
+
         Map<String, Integer> paramsMap = new HashMap();
         paramsMap.put("page", 1);
         paramsMap.put("pageSize",1);
+
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .params(paramsMap)
                 .when()
@@ -128,6 +137,7 @@ public class EmployeeControllerTest {
                 return super.getType();
             }
         });
+
         Assert.assertEquals(1, employees.size());
         Assert.assertEquals("Xiaoming", employees.get(0).getName());
     }
@@ -135,12 +145,9 @@ public class EmployeeControllerTest {
     @Test
     public void shouldAddEmployee(){
 
-        Employee newAddEmployee = new Employee();
-        newAddEmployee.setId(10);
-        newAddEmployee.setName("Dennis");
-
+        doReturn(employee).when(employeeService).createEmployee(any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .body(newAddEmployee)
+                .body(employee)
                 .when()
                 .post("/employees");
 
@@ -148,15 +155,16 @@ public class EmployeeControllerTest {
 
         Employee employee = response.getBody().as(Employee.class);
 
-        Assert.assertEquals(newAddEmployee.getName(),employee.getName());
-        Assert.assertEquals(newAddEmployee.getId(), employee.getId());
+        Assert.assertEquals("Xiaohong",employee.getName());
+        Assert.assertEquals(1, employee.getId());
     }
 
     @Test
     public void shouldUpdateEmployee(){
 
+        doReturn(employee).when(employeeService).updateEmployee(1,"Xiaohong",null,null,null);
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .param("name","DennisTesting")
+                .params("name","Xiaohong")
                 .when()
                 .put("/employees/1");
 
@@ -164,12 +172,13 @@ public class EmployeeControllerTest {
 
         Employee employee = response.getBody().as(Employee.class);
 
-        Assert.assertEquals("DennisTesting",employee.getName());
+        Assert.assertEquals("Xiaohong",employee.getName());
     }
 
     @Test
     public void shouldDeleteEmployee(){
 
+        doReturn(employee).when(employeeService).removeEmployee(1);
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
                 .delete("/employees/1");
@@ -177,7 +186,7 @@ public class EmployeeControllerTest {
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
         Employee employee = response.getBody().as(Employee.class);
-
+//
         Assert.assertEquals("Xiaohong",employee.getName());
 
     }
