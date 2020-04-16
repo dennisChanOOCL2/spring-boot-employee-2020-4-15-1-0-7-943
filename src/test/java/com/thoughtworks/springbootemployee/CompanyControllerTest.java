@@ -93,7 +93,7 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldFindCompanyById(){
-        doReturn(companyList.get(0)).when(companyService).getAll(any(),any());
+        doReturn(companyList.get(0)).when(companyService).getSpecificCompanyByCompanyId(any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1");
