@@ -169,11 +169,11 @@ public class CompanyControllerTest {
     @Test
     public void shouldDeleteCompany(){
 
-        doReturn(company).when(companyService).removeCompany(any());
+        doReturn(company).when(companyService).removeCompany(1);
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .body(company)
                 .when()
-                .delete("/companies");
+                .delete("/companies/1");
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
