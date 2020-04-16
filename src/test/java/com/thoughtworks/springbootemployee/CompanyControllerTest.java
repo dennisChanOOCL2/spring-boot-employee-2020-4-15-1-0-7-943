@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.controller.CompanyController;
 import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.EmployeeService;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.TypeRef;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -12,20 +13,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CompanyControllerTest {
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @Before
     public void setUp(){
@@ -65,22 +68,8 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldFindEmployeeByGender() {
-        MockMvcResponse response = given().contentType(ContentType.JSON)
-                .params("gender", "male")
-                .when()
-                .get("/employees");
+    public void getFindEmployeesForSpecificCompanyById() {
 
-        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-
-        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        });
-        Assert.assertEquals(3, employees.size());
-        Assert.assertEquals("Xiaoming", employees.get(0).getName());
     }
 
     @Test
