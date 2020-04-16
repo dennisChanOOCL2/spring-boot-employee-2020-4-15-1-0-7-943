@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,10 @@ public class CompanyService {
 
     @Autowired
     CompanyRepository repository;
+
+    public CompanyService(CompanyRepository repository) {
+        this.repository = repository;
+    }
 
     public Company getSpecificCompanyByCompanyId(int companyId) {
         return repository.findCompanyByCompanyId(companyId);

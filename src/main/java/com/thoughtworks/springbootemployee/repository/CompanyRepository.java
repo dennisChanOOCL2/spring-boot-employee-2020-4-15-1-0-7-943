@@ -10,8 +10,6 @@ import java.util.List;
 
 @Repository
 public class CompanyRepository {
-    private static final String MALE = "male";
-    private static final String FEMALE = "female";
     private List<Company> companyList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
@@ -19,10 +17,9 @@ public class CompanyRepository {
         List<Employee> companyOneEmployeeList = new ArrayList<>();
         List<Employee> companyTwoEmployeeList = new ArrayList<>();
 
-        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, MALE, 6000));
-        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, FEMALE, 7000));
-
-        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
+        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, commonUtils.MALE, 6000));
+        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, commonUtils.FEMALE, 7000));
+        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, commonUtils.MALE, 8000));
 
         companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
         companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));

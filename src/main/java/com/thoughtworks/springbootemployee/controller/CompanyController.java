@@ -17,13 +17,12 @@ import java.util.List;
 public class CompanyController {
 
     private List<Company> companyList = new ArrayList<>();
-    private CommonUtils commonUtils = new CommonUtils();
 
     @Autowired
     private CompanyService companyService;
 
-    public CompanyController(){
-
+    public CompanyController(CompanyService companyService){
+        this.companyService = companyService;
     }
 
     @GetMapping("/{companyId}/employees")
@@ -84,7 +83,6 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> updateCompany(@PathVariable int companyId,
                                                    @RequestParam(required = false) String companyName,
-                                                   @RequestParam(required = false) Integer employeesNumber,
                                                    @RequestParam(required = false) List<Employee> employeeList){
 
         Company selectedCompany = companyService.updateCompany(companyId, companyName, employeeList);
