@@ -13,8 +13,12 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
+    private final EmployeeRepository repository;
+
     @Autowired
-    EmployeeRepository repository;
+    public EmployeeService(EmployeeRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Employee> getAll(Integer page, Integer pageSize, String gender){
         return repository.findAll(page, pageSize, gender);
@@ -37,6 +41,18 @@ public class EmployeeService {
 
         return repository.updateEmployee(selectedEmployee, name, age, gender, salary);
 
+
+    }
+
+    public Employee removeEmployee(int id) {
+        Employee selectedEmployee = repository.findEmployeeById(id);
+        if(selectedEmployee == null){
+            return null;
+        }
+        if (!repository.removeEmployee(selectedEmployee)){
+            return null;
+        }
+        return selectedEmployee;
 
     }
 }

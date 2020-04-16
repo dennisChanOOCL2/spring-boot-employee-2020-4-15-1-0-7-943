@@ -78,4 +78,8 @@ public class EmployeeRepository {
         }
         return selectedEmployee;
     }
+
+    public boolean removeEmployee(Employee selectedEmployee) {
+        return employeeList.remove(selectedEmployee);
+    }
 }
