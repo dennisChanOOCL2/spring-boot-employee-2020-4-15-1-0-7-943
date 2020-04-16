@@ -16,7 +16,6 @@ public class CompanyController {
     public static final String MALE = "male";
     public static final String FEMALE = "female";
     private List<Company> companyList = new ArrayList<>();
-    private List<Employee> employeeList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
     public CompanyController(){
@@ -32,31 +31,31 @@ public class CompanyController {
         companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
     }
 
-    @GetMapping("/{id}/employees")
+    @GetMapping("/{companyId}/employees")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Employee>> getEmployeesForSpecificCompany(@PathVariable int id){
+    public ResponseEntity<List<Employee>> getEmployeesForSpecificCompany(@PathVariable int companyId){
         Company selectedCompany =  companyList.stream()
-                .filter(company -> company.getCompanyId() == id)
+                .filter(company -> company.getCompanyId() == companyId)
                 .findFirst()
                 .orElse(null);
 
         if(selectedCompany == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }else{
             return new ResponseEntity<>(selectedCompany.getEmployeeList(), HttpStatus.OK);
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Company> getSpecificCompany(@PathVariable int id){
+    public ResponseEntity<Company> getSpecificCompany(@PathVariable int companyId){
         Company selectedCompany =  companyList.stream()
-                .filter(company -> company.getCompanyId() == id)
+                .filter(company -> company.getCompanyId() == companyId)
                 .findFirst()
                 .orElse(null);
 
         if(selectedCompany == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }else{
             return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
         }
@@ -71,7 +70,7 @@ public class CompanyController {
         List<Company> returnList = new ArrayList<>(companyList);
         returnList = commonUtils.pagingForList(returnList, page, pageSize);
         if(returnList == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(returnList, HttpStatus.OK);
@@ -90,53 +89,64 @@ public class CompanyController {
     }
 
 
-    private Company selectCompanyById(int id){
+    private Company selectCompanyById(int companyId){
         Company selectedCompany =  companyList.stream()
-                .filter(company -> company.getCompanyId() == id)
+                .filter(company -> company.getCompanyId() == companyId)
                 .findFirst()
                 .orElse(null);
         return selectedCompany;
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Company> updateCompany(@PathVariable int id,
+    public ResponseEntity<Company> updateCompany(@PathVariable int companyId,
                                                    @RequestParam(required = false) String companyName,
                                                    @RequestParam(required = false) Integer employeesNumber,
                                                    @RequestParam(required = false) List<Employee> employeeList){
 
-        Company selectedCompany =  selectCompanyById(id);
+        Company selectedCompany =  selectCompanyById(companyId);
 
         if(selectedCompany == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        int originalEmployeesNumber = selectedCompany.getEmployeesNumber();
+
+        if(employeesNumber != null){
+            if(selectedCompany.getEmployeeList().size() > employeesNumber){
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            selectedCompany.setEmployeesNumber(employeesNumber);
+        }
+
+        if(employeeList != null){
+            if(employeeList.size() > selectedCompany.getEmployeesNumber()){
+                selectedCompany.setEmployeesNumber(originalEmployeesNumber);
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            selectedCompany.setEmployeeList(employeeList);
         }
 
         if(companyName != null){
             selectedCompany.setCompanyName(companyName);
         }
-        if(employeesNumber != null){
-            selectedCompany.setEmployeesNumber(employeesNumber);
-        }
-        if(employeeList != null){
-            selectedCompany.setEmployeeList(employeeList);
-        }
 
         return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Company> removeCompany(@PathVariable int id){
+    public ResponseEntity<Company> removeCompany(@PathVariable int companyId){
 
-        Company selectedCompany =  selectCompanyById(id);
+        Company selectedCompany =  selectCompanyById(companyId);
 
         if(selectedCompany != null){
             companyList.remove(selectedCompany);
             return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
     }
 

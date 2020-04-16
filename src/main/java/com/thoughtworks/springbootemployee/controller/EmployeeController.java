@@ -33,7 +33,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList.stream()
                 .filter(employee -> employee.getId() == id)
                 .findFirst()
-                .orElse(null), HttpStatus.BAD_REQUEST);
+                .orElse(null), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
@@ -49,12 +49,12 @@ public class EmployeeController {
                     .filter(employee -> employee.getGender().toUpperCase().equals(gender.toUpperCase()))
                     .collect(Collectors.toList());
             if(returnList.size() == 0){
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
         }
 
         if(commonUtils.pagingForList(returnList, page, pageSize) == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(commonUtils.pagingForList(returnList, page, pageSize), HttpStatus.OK);
@@ -90,7 +90,7 @@ public class EmployeeController {
         Employee selectedEmployee = selectEmployeeById(id);
 
         if(selectedEmployee == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         if(name != null){
@@ -118,7 +118,7 @@ public class EmployeeController {
 
         if(selectedEmployee == null){
             employeeList.remove(selectedEmployee);
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
     }
