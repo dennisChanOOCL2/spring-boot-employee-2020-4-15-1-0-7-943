@@ -19,16 +19,7 @@ public class CompanyController {
     private CommonUtils commonUtils = new CommonUtils();
 
     public CompanyController(){
-        List<Employee> companyOneEmployeeList = new ArrayList<>();
-        List<Employee> companyTwoEmployeeList = new ArrayList<>();
 
-        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, MALE, 6000));
-        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, FEMALE, 7000));
-
-        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, MALE, 8000));
-
-        companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
     }
 
     @GetMapping("/{companyId}/employees")

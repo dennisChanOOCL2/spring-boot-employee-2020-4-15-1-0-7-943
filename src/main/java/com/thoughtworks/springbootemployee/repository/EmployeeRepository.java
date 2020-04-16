@@ -39,9 +39,15 @@ public class EmployeeRepository {
             }
         }
 
-        if(commonUtils.pagingForList(returnList, page, pageSize) == null){
-            return null;
+        if(page != null && pageSize != null){
+
+            returnList = commonUtils.pagingForList(returnList, page, pageSize);
+
+            if(returnList == null){
+                return null;
+            }
         }
+
         return returnList;
     }
 

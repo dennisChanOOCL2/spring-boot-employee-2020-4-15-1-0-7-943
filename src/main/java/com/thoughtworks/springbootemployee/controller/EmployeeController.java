@@ -41,7 +41,7 @@ public class EmployeeController {
 
         List<Employee> returnList = employeeService.getAll(page, pageSize, gender);
         if(returnList == null){
-            return new ResponseEntity<>(returnList, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(returnList, HttpStatus.OK);
 
