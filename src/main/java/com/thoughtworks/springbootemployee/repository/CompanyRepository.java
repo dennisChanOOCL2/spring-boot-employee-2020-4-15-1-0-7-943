@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.repository;
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -59,5 +61,23 @@ public class CompanyRepository {
             companyList.add(companyToBeCreated);
             return companyToBeCreated;
         }
+    }
+
+    public Company updateCompany(Company selectedCompany, String companyName, List<Employee> employeeList) {
+
+        if(selectedCompany == null){
+            return null;
+        }
+
+        if(employeeList != null){
+            selectedCompany.setEmployeesNumber(employeeList.size());
+            selectedCompany.setEmployeeList(employeeList);
+        }
+
+        if(companyName != null){
+            selectedCompany.setCompanyName(companyName);
+        }
+
+        return selectedCompany;
     }
 }

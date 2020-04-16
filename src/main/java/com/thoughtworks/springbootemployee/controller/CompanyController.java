@@ -80,14 +80,6 @@ public class CompanyController {
     }
 
 
-    private Company selectCompanyById(int companyId){
-        return companyList.stream()
-                .filter(company -> company.getCompanyId() == companyId)
-                .findFirst()
-                .orElse(null);
-    }
-
-
     @PutMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> updateCompany(@PathVariable int companyId,
@@ -95,33 +87,12 @@ public class CompanyController {
                                                    @RequestParam(required = false) Integer employeesNumber,
                                                    @RequestParam(required = false) List<Employee> employeeList){
 
-        Company selectedCompany =  selectCompanyById(companyId);
+        Company selectedCompany = companyService.updateCompany(companyId, companyName, employeeList);
 
         if(selectedCompany == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
-        int originalEmployeesNumber = selectedCompany.getEmployeesNumber();
-
-        if(employeesNumber != null){
-            if(selectedCompany.getEmployeeList().size() > employeesNumber){
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
-            selectedCompany.setEmployeesNumber(employeesNumber);
-        }
-
-        if(employeeList != null){
-            if(employeeList.size() > selectedCompany.getEmployeesNumber()){
-                selectedCompany.setEmployeesNumber(originalEmployeesNumber);
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
-            selectedCompany.setEmployeeList(employeeList);
-        }
-
-        if(companyName != null){
-            selectedCompany.setCompanyName(companyName);
-        }
-
+        
         return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }
 
