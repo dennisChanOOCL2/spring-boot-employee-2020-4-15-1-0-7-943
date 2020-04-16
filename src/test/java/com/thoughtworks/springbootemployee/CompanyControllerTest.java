@@ -131,10 +131,8 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldUpdateCompany(){
-        Company companyToBeUpdated = new Company();
-        companyToBeUpdated.setCompanyName("DennisTesting");
 
-        doReturn(companyToBeUpdated).when(companyService).updateCompany(1,"DennisTesting",null);
+        doReturn(company).when(companyService).updateCompany(1,"DennisTesting",null);
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("companyName","DennisTesting");
 //        paramsMap.put("employeeList",null);
@@ -146,38 +144,42 @@ public class CompanyControllerTest {
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
-        Company company = response.getBody().as(Company.class);
+        Company companyUpdated = response.getBody().as(Company.class);
 
-        Assert.assertEquals(company.getCompanyName(),companyToBeUpdated.getCompanyName());
+        Assert.assertEquals(companyUpdated.getCompanyName(),company.getCompanyName());
 
     }
 
     @Test
     public void shouldCreateCompany(){
+
+        doReturn(company).when(companyService).createCompany(any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .param("name","DennisTesting")
+                .body(company)
                 .when()
-                .put("/employees/1");
+                .post("/companies");
 
-        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
 
-        Employee employee = response.getBody().as(Employee.class);
+        Company company = response.getBody().as(Company.class);
 
-        Assert.assertEquals("DennisTesting",employee.getName());
+        Assert.assertEquals("tengxun",company.getCompanyName());
     }
 
     @Test
-    public void shouldDeleteEmployee(){
+    public void shouldDeleteCompany(){
 
+        doReturn(company).when(companyService).removeCompany(any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
+                .body(company)
                 .when()
-                .delete("/employees/1");
+                .delete("/companies");
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
-        Employee employee = response.getBody().as(Employee.class);
+        Company company = response.getBody().as(Company.class);
 
-        Assert.assertEquals("Xiaohong",employee.getName());
+        Assert.assertEquals("tengxun",company.getCompanyName());
 
     }
 
