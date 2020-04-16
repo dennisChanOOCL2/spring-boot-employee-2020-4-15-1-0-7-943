@@ -130,26 +130,30 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldAddEmployee(){
-        Employee newAddEmployee = new Employee();
-        newAddEmployee.setId(10);
-        newAddEmployee.setName("Dennis");
+    public void shouldUpdateCompany(){
+        Company companyToBeUpdated = new Company();
+        companyToBeUpdated.setCompanyName("DennisTesting");
+
+        doReturn(companyToBeUpdated).when(companyService).updateCompany(1,"DennisTesting",null);
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("companyName","DennisTesting");
+//        paramsMap.put("employeeList",null);
 
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .body(newAddEmployee)
+                .params(paramsMap)
                 .when()
-                .post("/employees");
+                .put("/companies/1");
 
-        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
-        Employee employee = response.getBody().as(Employee.class);
+        Company company = response.getBody().as(Company.class);
 
-        Assert.assertEquals(newAddEmployee.getName(),employee.getName());
-        Assert.assertEquals(newAddEmployee.getId(), employee.getId());
+        Assert.assertEquals(company.getCompanyName(),companyToBeUpdated.getCompanyName());
+
     }
 
     @Test
-    public void shouldUpdateEmployee(){
+    public void shouldCreateCompany(){
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .param("name","DennisTesting")
                 .when()
