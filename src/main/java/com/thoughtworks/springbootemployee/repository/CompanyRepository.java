@@ -21,8 +21,8 @@ public class CompanyRepository {
         companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, commonUtils.FEMALE, 7000));
         companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, commonUtils.MALE, 8000));
 
-        companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
+        companyList.add(new Company("alibaba", 0, companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 1, companyTwoEmployeeList));
     }
 
     public Company findCompanyByCompanyId(int companyId){

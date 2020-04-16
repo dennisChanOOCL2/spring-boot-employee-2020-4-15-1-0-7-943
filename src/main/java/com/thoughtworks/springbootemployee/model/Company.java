@@ -8,10 +8,14 @@ public class Company {
     private int companyId;
     private List<Employee> employeeList;
 
-    public Company(String companyName,int companyId, int employeesNumber, List employeeList){
+    public Company(){
+
+    }
+
+    public Company(String companyName,int companyId, List employeeList){
         this.companyName = companyName;
         this.companyId = companyId;
-        this.employeesNumber = employeesNumber;
+        this.employeesNumber = employeeList.size();
         this.employeeList = employeeList;
     }
 

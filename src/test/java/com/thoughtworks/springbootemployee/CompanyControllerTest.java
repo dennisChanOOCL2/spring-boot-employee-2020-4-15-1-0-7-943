@@ -33,6 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 public class CompanyControllerTest {
 
     private List<Company> companyList = new ArrayList<>();
+    private Company company = new Company();
     private CommonUtils commonUtils = new CommonUtils();
 
     @Mock
@@ -50,9 +51,10 @@ public class CompanyControllerTest {
         companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, commonUtils.FEMALE, 7000));
         companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, commonUtils.MALE, 8000));
 
-        companyList.add(new Company("alibaba", 0, 200, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
+        companyList.add(new Company("alibaba", 0,companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 1,companyTwoEmployeeList));
 
+        company = companyList.get(1);
     }
 
     @Test
@@ -75,7 +77,9 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldFindAllCompanyWithPaging(){
-        doReturn(companyList.subList(0,1)).when(companyService).getAll(any(),any());
+        doReturn(companyList.subList(0,1))
+                .when(companyService)
+                .getAll(any(),any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies");
@@ -93,7 +97,7 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldFindCompanyById(){
-        doReturn(companyList.get(0)).when(companyService).getSpecificCompanyByCompanyId(any());
+        doReturn(company).when(companyService).getSpecificCompanyByCompanyId(1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1");
@@ -102,34 +106,27 @@ public class CompanyControllerTest {
 
         Company company = response.getBody().as(Company.class);
         Assert.assertEquals(1, company.getCompanyId());
-        Assert.assertEquals("alibaba", company.getCompanyName());
+        Assert.assertEquals("tengxun", company.getCompanyName());
     }
 
     @Test
     public void getFindEmployeesForSpecificCompanyById() {
-
-    }
-
-    @Test
-    public void shouldFindEmployeeByPaging() {
-        Map paramsMap = new HashMap();
-        paramsMap.put("page", 1);
-        paramsMap.put("pageSize",1);
+        doReturn(company.getEmployeeList()).when(companyService).getEmployeesForSpecificCompanyByCompanyId(1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
-                .params(paramsMap)
                 .when()
-                .get("/employees");
+                .get("/companies/1/employees");
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
-        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
+        List<Employee> employeeList = response.getBody().as(new TypeRef<List<Employee>>() {
             @Override
             public Type getType() {
                 return super.getType();
             }
         });
-        Assert.assertEquals(1, employees.size());
-        Assert.assertEquals("Xiaoming", employees.get(0).getName());
+
+        Assert.assertEquals(1, employeeList.size());
+        Assert.assertEquals("alibaba3", employeeList.get(0).getName());
     }
 
     @Test
