@@ -15,8 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private static final String MALE = "male";
-    private static final String FEMALE = "female";
+
     private List<Company> companyList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
@@ -55,15 +54,14 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Company>> getAllCompany(
             @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer pageSize
-                                         ){
-        List returnList = new ArrayList<>(companyList);
-        returnList = commonUtils.pagingForList(returnList, page, pageSize);
-        if(returnList == null){
+            @RequestParam(required = false) Integer pageSize){
+        List<Company> companyList = companyService.getAll(page, pageSize);
+
+        if(companyList == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(returnList, HttpStatus.OK);
+        return new ResponseEntity<>(companyList, HttpStatus.OK);
 
     }
 

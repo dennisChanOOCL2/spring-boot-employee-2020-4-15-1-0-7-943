@@ -18,9 +18,12 @@ public class CompanyService {
         return repository.findCompanyByCompanyId(companyId);
     }
 
-
     public List<Employee> getEmployeesForSpecificCompanyByCompanyId(int companyId) {
         Company selectedCompany = repository.findCompanyByCompanyId(companyId);
         return selectedCompany.getEmployeeList();
+    }
+
+    public List<Company> getAll(Integer page, Integer pageSize) {
+        return repository.findAll(page, pageSize);
     }
 }
