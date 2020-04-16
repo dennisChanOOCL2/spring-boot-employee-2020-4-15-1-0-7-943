@@ -57,8 +57,7 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldFindAllCompany(){
-
-        doReturn(companyList.subList(0,1)).when(companyService).getAll(any(),any());
+        doReturn(companyList).when(companyService).getAll(any(),any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies");
@@ -70,13 +69,12 @@ public class CompanyControllerTest {
                 return super.getType();
             }
         });
-        Assert.assertEquals(1, companies.size());
+        Assert.assertEquals(2, companies.size());
         Assert.assertEquals("alibaba", companies.get(0).getCompanyName());
     }
 
     @Test
     public void shouldFindAllCompanyWithPaging(){
-
         doReturn(companyList.subList(0,1)).when(companyService).getAll(any(),any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .when()
@@ -95,6 +93,7 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldFindCompanyById(){
+        doReturn(companyList.get(0)).when(companyService).getAll(any(),any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1");
@@ -103,7 +102,7 @@ public class CompanyControllerTest {
 
         Company company = response.getBody().as(Company.class);
         Assert.assertEquals(1, company.getCompanyId());
-        Assert.assertEquals("tengxun", company.getCompanyName());
+        Assert.assertEquals("alibaba", company.getCompanyName());
     }
 
     @Test
