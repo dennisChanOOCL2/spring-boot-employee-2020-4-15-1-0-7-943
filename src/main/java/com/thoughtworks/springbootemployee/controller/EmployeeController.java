@@ -30,18 +30,20 @@ public class EmployeeController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Employee> getSpecificEmployee(@PathVariable int id){
-        return new ResponseEntity<>(employeeList.stream()
-                .filter(employee -> employee.getId() == id)
-                .findFirst()
-                .orElse(null), HttpStatus.NOT_FOUND);
+        Employee selectedEmployee = selectEmployeeById(id);
+
+        if(selectedEmployee == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
+        }
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Employee>> getAllEmployee(@RequestParam(required = false) Integer page,
                                                          @RequestParam(required = false) Integer pageSize,
-                                                         @RequestParam(required = false) String gender
-                                         ){
+                                                         @RequestParam(required = false) String gender){
         List<Employee> returnList = new ArrayList<>(employeeList);
 
         if(gender != null){

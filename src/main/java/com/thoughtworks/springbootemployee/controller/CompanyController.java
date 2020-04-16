@@ -34,10 +34,7 @@ public class CompanyController {
     @GetMapping("/{companyId}/employees")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Employee>> getEmployeesForSpecificCompany(@PathVariable int companyId){
-        Company selectedCompany =  companyList.stream()
-                .filter(company -> company.getCompanyId() == companyId)
-                .findFirst()
-                .orElse(null);
+        Company selectedCompany =  selectCompanyById(companyId);
 
         if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -49,10 +46,7 @@ public class CompanyController {
     @GetMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> getSpecificCompany(@PathVariable int companyId){
-        Company selectedCompany =  companyList.stream()
-                .filter(company -> company.getCompanyId() == companyId)
-                .findFirst()
-                .orElse(null);
+        Company selectedCompany =  selectCompanyById(companyId);
 
         if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
