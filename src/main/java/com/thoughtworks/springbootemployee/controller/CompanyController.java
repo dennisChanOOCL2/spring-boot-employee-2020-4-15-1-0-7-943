@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.controller;
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class CompanyController {
     private List<Company> companyList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
+    @Autowired
+    private CompanyService companyService;
+
     public CompanyController(){
 
     }
@@ -25,19 +30,19 @@ public class CompanyController {
     @GetMapping("/{companyId}/employees")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Employee>> getEmployeesForSpecificCompany(@PathVariable int companyId){
-        Company selectedCompany =  selectCompanyById(companyId);
+        List<Employee> employeeList = companyService.getEmployeesForSpecificCompanyByCompanyId(companyId);
 
-        if(selectedCompany == null){
+        if(employeeList == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }else{
-            return new ResponseEntity<>(selectedCompany.getEmployeeList(), HttpStatus.OK);
+            return new ResponseEntity<>(employeeList, HttpStatus.OK);
         }
     }
 
     @GetMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> getSpecificCompany(@PathVariable int companyId){
-        Company selectedCompany =  selectCompanyById(companyId);
+        Company selectedCompany =  companyService.getSpecificCompanyByCompanyId(companyId);
 
         if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -64,7 +69,7 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Company> createEmployee(@RequestBody Company company){
+    public ResponseEntity<Company> createCompany(@RequestBody Company company){
         if(selectCompanyById(company.getCompanyId()) != null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }else{

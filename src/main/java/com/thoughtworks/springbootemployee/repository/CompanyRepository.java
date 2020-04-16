@@ -28,13 +28,28 @@ public class CompanyRepository {
         companyList.add(new Company("tengxun", 1,200, companyTwoEmployeeList));
     }
 
-    public Company getCompanyById(int companyId){
+    public Company findCompanyByCompanyId(int companyId){
         return companyList.stream()
                 .filter(company -> company.getCompanyId() == companyId)
                 .findFirst()
                 .orElse(null);
     }
 
+    public List<Employee> findEmployeeListForCompany(Company company){
+        return company.getEmployeeList();
+    }
 
+
+    public List<Company> findAll(Integer page, Integer pageSize){
+
+        List<Company> returnList = new ArrayList<>(companyList);
+
+        returnList = commonUtils.pagingForList(returnList, page, pageSize);
+        if(returnList == null){
+            return null;
+        }
+
+        return returnList;
+    }
 
 }
