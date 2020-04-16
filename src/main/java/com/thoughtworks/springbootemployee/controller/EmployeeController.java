@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    public static final String MALE = "male";
-    public static final String FEMALE = "female";
+    private static final String MALE = "male";
+    private static final String FEMALE = "female";
     private List<Employee> employeeList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
@@ -75,10 +75,9 @@ public class EmployeeController {
     }
 
     private Employee selectEmployeeById(int id){
-        Employee employee = employeeList.stream()
+        return employeeList.stream()
                 .filter(existEmployee -> existEmployee.getId() == id)
                 .findAny().orElse(null);
-        return employee;
     }
 
     @PutMapping("/{id}")
@@ -119,9 +118,9 @@ public class EmployeeController {
         Employee selectedEmployee = selectEmployeeById(id);
 
         if(selectedEmployee == null){
-            employeeList.remove(selectedEmployee);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+        employeeList.remove(selectedEmployee);
         return new ResponseEntity<>(selectedEmployee, HttpStatus.OK);
     }
 

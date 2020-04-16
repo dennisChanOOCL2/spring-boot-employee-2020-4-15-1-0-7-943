@@ -11,7 +11,7 @@ public class CommonUtils {
 
         if (page != null && pageSize != null) {
             try {
-                returnList = returnList.subList(page * pageSize, page * pageSize + pageSize);
+                returnList = returnList.subList((page-1) * pageSize, (page-1) * pageSize + pageSize);
                 return returnList;
             } catch (IndexOutOfBoundsException expcetion) {
                 return null;

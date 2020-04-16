@@ -13,8 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    public static final String MALE = "male";
-    public static final String FEMALE = "female";
+    private static final String MALE = "male";
+    private static final String FEMALE = "female";
     private List<Company> companyList = new ArrayList<>();
     private CommonUtils commonUtils = new CommonUtils();
 
@@ -61,7 +61,7 @@ public class CompanyController {
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer pageSize
                                          ){
-        List<Company> returnList = new ArrayList<>(companyList);
+        List returnList = new ArrayList<>(companyList);
         returnList = commonUtils.pagingForList(returnList, page, pageSize);
         if(returnList == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -84,11 +84,10 @@ public class CompanyController {
 
 
     private Company selectCompanyById(int companyId){
-        Company selectedCompany =  companyList.stream()
+        return companyList.stream()
                 .filter(company -> company.getCompanyId() == companyId)
                 .findFirst()
                 .orElse(null);
-        return selectedCompany;
     }
 
 
