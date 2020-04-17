@@ -20,7 +20,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getAll(Integer page, Integer pageSize, String gender){
-        
+
         Pageable pageable = null;
 
         if(page != null && pageSize != null){
@@ -39,7 +39,7 @@ public class EmployeeService {
     }
 
     public Employee createEmployee(Employee employee){
-        if(repository.findById(employee.getId()).orElse(null) != null){
+        if(repository.findById(employee.getId()).orElse(null) == null){
             return repository.save(employee);
         }
         return null;

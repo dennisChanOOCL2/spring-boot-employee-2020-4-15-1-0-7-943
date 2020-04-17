@@ -21,7 +21,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -43,11 +42,11 @@ public class EmployeeControllerTest {
         EmployeeController employeeController = new EmployeeController(employeeService);
         RestAssuredMockMvc.standaloneSetup(employeeController);
 
-        employeeList.add(new Employee(0,"Xiaoming", 20, CommonUtils.MALE));
-        employeeList.add(new Employee(1,"Xiaohong", 19, CommonUtils.FEMALE));
-        employeeList.add(new Employee(2,"Xiaozhi", 15, CommonUtils.MALE));
-        employeeList.add(new Employee(3,"Xiaogang", 16, CommonUtils.MALE));
-        employeeList.add(new Employee(4,"Xiaoxia", 15, CommonUtils.FEMALE));
+        employeeList.add(new Employee(new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
+        employeeList.add(new Employee(new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
 
         employee.setId(1);
         employee.setName("Xiaohong");
@@ -86,7 +85,7 @@ public class EmployeeControllerTest {
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
         Employee employee = response.getBody().as(Employee.class);
-        Assert.assertEquals(1, employee.getId());
+        Assert.assertEquals(new Integer(1), employee.getId());
         Assert.assertEquals("Xiaohong", employee.getName());
     }
 
@@ -156,7 +155,7 @@ public class EmployeeControllerTest {
         Employee employee = response.getBody().as(Employee.class);
 
         Assert.assertEquals("Xiaohong",employee.getName());
-        Assert.assertEquals(1, employee.getId());
+        Assert.assertEquals(new Integer(1), employee.getId());
     }
 
     @Test
