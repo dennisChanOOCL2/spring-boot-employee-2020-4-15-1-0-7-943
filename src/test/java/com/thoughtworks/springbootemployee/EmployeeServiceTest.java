@@ -38,21 +38,21 @@ public class EmployeeServiceTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
-//    @Before
-//    public void setUp(){
-//        EmployeeController employeeController = new EmployeeController(employeeService);
-//        RestAssuredMockMvc.standaloneSetup(employeeController);
-//
-//        employeeList.add(new Employee(0,"Xiaoming", 20, CommonUtils.MALE));
-//        employeeList.add(new Employee(1,"Xiaohong", 19, CommonUtils.FEMALE));
-//        employeeList.add(new Employee(2,"Xiaozhi", 15, CommonUtils.MALE));
-//        employeeList.add(new Employee(3,"Xiaogang", 16, CommonUtils.MALE));
-//        employeeList.add(new Employee(4,"Xiaoxia", 15, CommonUtils.FEMALE));
-//
-//        employee.setId(1);
-//        employee.setName("Xiaohong");
-//
-//    }
+    @Before
+    public void setUp(){
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        RestAssuredMockMvc.standaloneSetup(employeeService);
+
+        employeeRepository.save(new Employee(new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
+        employeeRepository.save(new Employee(new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
+        employeeRepository.save(new Employee(new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
+        employeeRepository.save(new Employee(new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
+        employeeRepository.save(new Employee(new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
+
+        employee.setId(1);
+        employee.setName("Xiaohong");
+
+    }
 
 //    @Test
 //    public void shouldFindAllEmployee(){

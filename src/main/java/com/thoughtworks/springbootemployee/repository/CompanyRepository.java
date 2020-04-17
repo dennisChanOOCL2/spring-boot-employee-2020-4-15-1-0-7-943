@@ -3,67 +3,13 @@ package com.thoughtworks.springbootemployee.repository;
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CompanyRepository {
-    private List<Company> companyList = new ArrayList<>();
-    private CommonUtils commonUtils = new CommonUtils();
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
-    public CompanyRepository(){
-        List<Employee> companyOneEmployeeList = new ArrayList<>();
-        List<Employee> companyTwoEmployeeList = new ArrayList<>();
-
-        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, commonUtils.MALE, 6000));
-        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, commonUtils.FEMALE, 7000));
-        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, commonUtils.MALE, 8000));
-
-        companyList.add(new Company("alibaba", 0, companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 1, companyTwoEmployeeList));
-    }
-
-    public Company findCompanyByCompanyId(int companyId){
-        return companyList.stream()
-                .filter(company -> company.getCompanyId() == companyId)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public List<Employee> findEmployeeListForCompany(Company company){
-        return company.getEmployeeList();
-    }
-
-    public List<Company> findAll(){
-
-        List<Company> returnList = new ArrayList<>(companyList);
-
-        return returnList;
-    }
-
-    public List<Company> findAllWithPaging(List<Company> companyList, Integer page, Integer pageSize){
-        return commonUtils.pagingForList(companyList, page, pageSize);
-    }
-
-
-    public Company addCompany(Company companyToBeCreated) {
-        if(findCompanyByCompanyId(companyToBeCreated.getCompanyId()) != null){
-            return null;
-        }else{
-            companyList.add(companyToBeCreated);
-            return companyToBeCreated;
-        }
-    }
-
-    public Company updateCompany(Company selectedCompany, Company updateDataCompany) {
-
-        selectedCompany.updateCompany(updateDataCompany);
-        return selectedCompany;
-    }
-
-    public boolean removeCompany(Company selectedCompany) {
-        return companyList.remove(selectedCompany);
-    }
 }

@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public class CompanyService {
     }
 
     public Company getSpecificCompanyByCompanyId(int companyId) {
-        return repository.findCompanyByCompanyId(companyId);
+        return repository.findById(companyId).orElse(null);
     }
 
     public List<Employee> getEmployeesForSpecificCompanyByCompanyId(int companyId) {
-        Company selectedCompany = repository.findCompanyByCompanyId(companyId);
+        Company selectedCompany = repository.findById(companyId).orElse(null);
         return selectedCompany.getEmployeeList();
     }
 
@@ -33,18 +34,18 @@ public class CompanyService {
         List<Company> returnCompanyList = repository.findAll();
 
         if(page != null && pageSize != null){
-            returnCompanyList = repository.findAllWithPaging(returnCompanyList, page, pageSize);
+            returnCompanyList = repository.findAll(PageRequest.of(page,pageSize)).getContent();
         }
 
         return returnCompanyList;
     }
 
     public Company createCompany(Company company) {
-        return repository.addCompany(company);
+        return repository.save(company);
     }
 
     public Company updateCompany(int companyId, String companyName, List<Employee> employeeList) {
-        Company selectedCompany = repository.findCompanyByCompanyId(companyId);
+        Company selectedCompany = repository.findById(companyId).orElse(null);
         if(selectedCompany == null){
             return null;
         }
@@ -53,18 +54,20 @@ public class CompanyService {
         updatedData.setCompanyName(companyName);
         updatedData.setEmployeeList(employeeList);
 
-        return repository.updateCompany(selectedCompany, updatedData);
+        selectedCompany.updateCompany(updatedData);
+
+        return repository.save(selectedCompany);
 
     }
 
     public Company removeCompany(int companyId) {
-        Company selectedCompany = repository.findCompanyByCompanyId(companyId);
+        Company selectedCompany = repository.findById(companyId).orElse(null);
+
         if(selectedCompany == null){
             return null;
         }
-        if (!repository.removeCompany(selectedCompany)){
-            return null;
-        }
+
+        repository.delete(selectedCompany);
         return selectedCompany;
     }
 }
