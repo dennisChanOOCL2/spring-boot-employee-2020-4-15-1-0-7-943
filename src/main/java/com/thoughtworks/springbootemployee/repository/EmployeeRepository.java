@@ -25,24 +25,14 @@ public class EmployeeRepository {
         employeeList.add(new Employee(4,"Xiaoxia", 15, CommonUtils.FEMALE));
     }
 
-    public List<Employee> findAll(Integer page, Integer pageSize, String gender){
-
+    public List<Employee> findAllEmployees(){
         List<Employee> returnList = new ArrayList<>(employeeList);
-        if(gender != null){
-            returnList = returnList.stream()
-                    .filter(employee -> employee.getGender().toUpperCase().equals(gender.toUpperCase()))
-                    .collect(Collectors.toList());
-            if(returnList.size() == 0){
-                return null;
-            }
-        }
-
-        returnList = commonUtils.pagingForList(returnList, page, pageSize);
-        if(returnList == null){
-            return null;
-        }
-
         return returnList;
+    }
+
+    public List<Employee> findAllEmployeesWithPaging(Integer page, Integer pageSize){
+        List<Employee> returnList = new ArrayList<>(employeeList);
+        return commonUtils.pagingForList(returnList, page, pageSize);
     }
 
     public Employee findEmployeeById(int id){
@@ -60,22 +50,8 @@ public class EmployeeRepository {
         }
     }
 
-    public Employee updateEmployee(Employee selectedEmployee, String name, Integer age, String gender, Integer salary) {
-        if(name != null){
-            selectedEmployee.setName(name);
-        }
-        if(age != null){
-            selectedEmployee.setAge(age);
-        }
-        if(gender != null){
-            if(gender.toUpperCase().equals(CommonUtils.MALE.toUpperCase())
-                    || gender.toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
-                selectedEmployee.setGender(gender);
-            }
-        }
-        if(salary != null){
-            selectedEmployee.setSalary(salary);
-        }
+    public Employee updateEmployee(Employee selectedEmployee, Employee updateData) {
+        selectedEmployee.updateEmployee(updateData);
         return selectedEmployee;
     }
 

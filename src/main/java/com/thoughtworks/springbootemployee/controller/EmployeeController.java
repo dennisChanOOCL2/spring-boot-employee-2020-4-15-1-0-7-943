@@ -67,6 +67,7 @@ public class EmployeeController {
                                                    @RequestParam(required = false) Integer age,
                                                    @RequestParam(required = false) String gender,
                                                    @RequestParam(required = false) Integer salary){
+
         Employee employeeToBeUpdated = employeeService.updateEmployee(id, name, age, gender, salary);
         if(employeeToBeUpdated == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

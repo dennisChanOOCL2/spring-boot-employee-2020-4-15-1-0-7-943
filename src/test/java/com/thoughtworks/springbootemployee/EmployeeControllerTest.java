@@ -120,7 +120,7 @@ public class EmployeeControllerTest {
 
         doReturn(employeeList).when(employeeService).getAll(1,1,null);
 
-        Map<String, Integer> paramsMap = new HashMap();
+        HashMap<String, Integer> paramsMap = new HashMap();
         paramsMap.put("page", 1);
         paramsMap.put("pageSize",1);
 

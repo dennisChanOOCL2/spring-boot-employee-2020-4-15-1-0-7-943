@@ -1,12 +1,14 @@
 package com.thoughtworks.springbootemployee.model;
 
 
+import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
+
 public class Employee {
     private int id;
     private String name;
-    private int age;
+    private Integer age;
     private String gender;
-    private int salary;
+    private Integer salary;
 
     public Employee() {
     }
@@ -42,11 +44,11 @@ public class Employee {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -58,11 +60,31 @@ public class Employee {
         this.gender = gender;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
+
+    public void updateEmployee(Employee updateData){
+        if(updateData.getName() != null){
+            this.setName(updateData.getName());
+        }
+        if(updateData.getAge() != null){
+            this.setAge(updateData.getAge());
+        }
+        if(updateData.getGender() != null){
+            if(updateData.getGender().toUpperCase().equals(CommonUtils.MALE.toUpperCase())
+                    || updateData.getGender().toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
+                this.setGender(updateData.getGender());
+            }
+        }
+        if(updateData.getSalary() != null){
+            this.setSalary(updateData.getSalary());
+        }
+    }
+
+
 }

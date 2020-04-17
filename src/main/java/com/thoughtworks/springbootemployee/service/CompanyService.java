@@ -35,12 +35,13 @@ public class CompanyService {
         return repository.addCompany(company);
     }
 
+    // direct update company
     public Company updateCompany(int companyId, String companyName, List<Employee> employeeList) {
         Company selectedCompany = repository.findCompanyByCompanyId(companyId);
         if(selectedCompany == null){
             return null;
         }
-
+    // add update method in Company
         return repository.updateCompany(selectedCompany, companyName, employeeList);
 
     }
