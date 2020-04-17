@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -47,12 +48,12 @@ public class CompanyControllerTest {
         List<Employee> companyOneEmployeeList = new ArrayList<>();
         List<Employee> companyTwoEmployeeList = new ArrayList<>();
 
-        companyOneEmployeeList.add(new Employee(4,"alibaba1", 20, commonUtils.MALE, 6000));
-        companyOneEmployeeList.add(new Employee(11,"tengxun2", 19, commonUtils.FEMALE, 7000));
-        companyTwoEmployeeList.add(new Employee(6,"alibaba3", 19, commonUtils.MALE, 8000));
+        companyOneEmployeeList.add(new Employee(null,null,4,"alibaba1", 20, commonUtils.MALE, 6000));
+        companyOneEmployeeList.add(new Employee(null,null,11,"tengxun2", 19, commonUtils.FEMALE, 7000));
+        companyTwoEmployeeList.add(new Employee(null,null,6,"alibaba3", 19, commonUtils.MALE, 8000));
 
-        companyList.add(new Company("alibaba", 0,companyOneEmployeeList));
-        companyList.add(new Company("tengxun", 1,companyTwoEmployeeList));
+        companyList.add(new Company("alibaba", 0,companyOneEmployeeList.size(),companyOneEmployeeList));
+        companyList.add(new Company("tengxun", 1,companyOneEmployeeList.size(),companyTwoEmployeeList));
 
         company = companyList.get(1);
     }
@@ -105,13 +106,13 @@ public class CompanyControllerTest {
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 
         Company company = response.getBody().as(Company.class);
-        Assert.assertEquals(1, company.getCompanyId());
+        Assert.assertEquals(2, company.getCompanyId());
         Assert.assertEquals("tengxun", company.getCompanyName());
     }
 
     @Test
     public void getFindEmployeesForSpecificCompanyById() {
-        doReturn(company.getEmployeeList()).when(companyService).getEmployeesForSpecificCompanyByCompanyId(1);
+        doReturn(company.getEmployeesList()).when(companyService).getEmployeesForSpecificCompanyByCompanyId(1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1/employees");
@@ -132,13 +133,18 @@ public class CompanyControllerTest {
     @Test
     public void shouldUpdateCompany(){
 
-        doReturn(company).when(companyService).updateCompany(1,"DennisTesting",null);
+        doReturn(company)
+                .when(companyService)
+                .updateCompany(
+                        eq(1)
+                        ,any()
+                );
+
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("companyName","DennisTesting");
-//        paramsMap.put("employeeList",null);
 
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-                .params(paramsMap)
+                .body(company)
                 .when()
                 .put("/companies/1");
 
@@ -153,7 +159,9 @@ public class CompanyControllerTest {
     @Test
     public void shouldCreateCompany(){
 
-        doReturn(company).when(companyService).createCompany(any());
+        doReturn(company)
+                .when(companyService)
+                .createCompany(any());
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .body(company)
                 .when()

@@ -1,10 +1,10 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,17 +21,27 @@ public class EmployeeService {
 
     public List<Employee> getAll(Integer page, Integer pageSize, String gender){
 
-        Pageable pageable = null;
+        PageRequest pageable = null;
 
         if(page != null && pageSize != null){
             pageable = PageRequest.of(page,pageSize);
         }
 
-        if(gender != null){
-            return repository.findAllByGender(gender, pageable);
+        if(pageable != null){
+            if(gender != null){
+                return repository.findAllByGender(gender, pageable);
+            }
+            return repository.findAll(pageable).getContent();
         }
 
-        return repository.findAll(pageable).getContent();
+        if(gender != null){
+            return repository.findAllByGender(gender);
+        }
+
+        List<Employee> returnList = repository.findAll();
+
+        return returnList;
+
     }
 
     public Employee getSpecificEmployee(int id){
@@ -57,7 +67,7 @@ public class EmployeeService {
         updateData.setAge(age);
         updateData.setGender(gender);
 
-        selectedEmployee.updateEmployee(updateData);
+        this.updateEmployee(selectedEmployee, updateData);
         return repository.save(selectedEmployee);
 
     }
@@ -69,5 +79,23 @@ public class EmployeeService {
         }
         repository.delete(selectedEmployee);
         return selectedEmployee;
+    }
+
+    private void updateEmployee(Employee selectedEmployee, Employee updateData){
+        if(updateData.getName() != null){
+            selectedEmployee.setName(updateData.getName());
+        }
+        if(updateData.getAge() != null){
+            selectedEmployee.setAge(updateData.getAge());
+        }
+        if(updateData.getGender() != null){
+            if(updateData.getGender().toUpperCase().equals(CommonUtils.MALE.toUpperCase())
+                    || updateData.getGender().toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
+                selectedEmployee.setGender(updateData.getGender());
+            }
+        }
+        if(updateData.getSalary() != null){
+            selectedEmployee.setSalary(updateData.getSalary());
+        }
     }
 }

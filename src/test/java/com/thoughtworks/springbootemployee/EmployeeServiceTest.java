@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,42 +39,34 @@ public class EmployeeServiceTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
+    private EmployeeService employeeService;
+
     @Before
     public void setUp(){
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
-        RestAssuredMockMvc.standaloneSetup(employeeService);
+        employeeService = new EmployeeService(employeeRepository);
 
-        employeeRepository.save(new Employee(new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
-        employeeRepository.save(new Employee(new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
-        employeeRepository.save(new Employee(new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
-        employeeRepository.save(new Employee(new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
-        employeeRepository.save(new Employee(new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
+        employeeList.add(new Employee(null, new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null, new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
+        employeeList.add(new Employee(null, new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null, new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null, new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
 
         employee.setId(1);
         employee.setName("Xiaohong");
 
     }
 
-//    @Test
-//    public void shouldFindAllEmployee(){
-//
-//        doReturn(employeeList).when(employeeService).getAll(null,null,null);
-//        MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
-//                .when()
-//                .get("/employees");
-//
-//        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-//
-//        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
-//            @Override
-//            public Type getType() {
-//                return super.getType();
-//            }
-//        });
-//
-//        Assert.assertEquals(5, employees.size());
-//        Assert.assertEquals("Xiaoming", employees.get(0).getName());
-//    }
+    @Test
+    public void shouldFindAllEmployee(){
+
+        doReturn(employeeList).when(employeeRepository).findAll();
+
+        List<Employee> employeesList = employeeService.getAll(null, null, null);
+
+        Assert.assertEquals(5, employeesList.size());
+        Assert.assertEquals("Xiaoming", employeesList.get(0).getName());
+
+    }
 //
 //    @Test
 //    public void shouldFindEmployeeById(){

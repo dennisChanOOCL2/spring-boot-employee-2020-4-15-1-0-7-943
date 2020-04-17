@@ -42,11 +42,11 @@ public class EmployeeControllerTest {
         EmployeeController employeeController = new EmployeeController(employeeService);
         RestAssuredMockMvc.standaloneSetup(employeeController);
 
-        employeeList.add(new Employee(new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
-        employeeList.add(new Employee(new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
-        employeeList.add(new Employee(new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
-        employeeList.add(new Employee(new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
-        employeeList.add(new Employee(new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
+        employeeList.add(new Employee(null,null,new Integer(0),"Xiaoming", new Integer(20), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null,null,new Integer(1),"Xiaohong", new Integer(19), CommonUtils.FEMALE, new Integer(8000)));
+        employeeList.add(new Employee(null,null,new Integer(2),"Xiaozhi", new Integer(15), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null,null,new Integer(3),"Xiaogang", new Integer(16), CommonUtils.MALE, new Integer(8000)));
+        employeeList.add(new Employee(null,null,new Integer(4),"Xiaoxia", new Integer(15), CommonUtils.FEMALE, new Integer(8000)));
 
         employee.setId(1);
         employee.setName("Xiaohong");

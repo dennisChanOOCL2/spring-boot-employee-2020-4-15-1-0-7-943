@@ -82,18 +82,13 @@ public class CompanyController {
     @PutMapping("/{companyId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Company> updateCompany(@PathVariable int companyId,
-                                                   @RequestParam(required = false) String companyName,
-                                                   @RequestParam(required = false) List<Employee> employeeList){
+                                                   @RequestBody Company updateDataCompany){
 
-        Company selectedCompany = companyService.updateCompany(companyId, companyName, employeeList);
+        Company selectedCompany = companyService.updateCompany(companyId, updateDataCompany);
 
         if(selectedCompany == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
-        Company updateDataCompany = new Company();
-        updateDataCompany.setCompanyName(companyName);
-        updateDataCompany.setEmployeeList(employeeList);
 
         return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }

@@ -26,7 +26,7 @@ public class CompanyService {
 
     public List<Employee> getEmployeesForSpecificCompanyByCompanyId(int companyId) {
         Company selectedCompany = repository.findById(companyId).orElse(null);
-        return selectedCompany.getEmployeeList();
+        return selectedCompany.getEmployeesList();
     }
 
     public List<Company> getAll(Integer page, Integer pageSize) {
@@ -44,15 +44,15 @@ public class CompanyService {
         return repository.save(company);
     }
 
-    public Company updateCompany(int companyId, String companyName, List<Employee> employeeList) {
+    public Company updateCompany(int companyId, Company updateDataCompany) {
         Company selectedCompany = repository.findById(companyId).orElse(null);
         if(selectedCompany == null){
             return null;
         }
 
         Company updatedData = new Company();
-        updatedData.setCompanyName(companyName);
-        updatedData.setEmployeeList(employeeList);
+        updatedData.setCompanyName(updateDataCompany.getCompanyName());
+        updatedData.setEmployeesList(updateDataCompany.getEmployeesList());
 
         selectedCompany.updateCompany(updatedData);
 
@@ -70,4 +70,5 @@ public class CompanyService {
         repository.delete(selectedCompany);
         return selectedCompany;
     }
+
 }
