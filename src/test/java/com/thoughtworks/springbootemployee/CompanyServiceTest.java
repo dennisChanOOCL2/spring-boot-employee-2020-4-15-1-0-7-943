@@ -1,38 +1,25 @@
 package com.thoughtworks.springbootemployee;
 
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
-import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
-import io.restassured.http.ContentType;
-import io.restassured.mapper.TypeRef;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class EmployeeServiceTest {
+public class CompanyServiceTest {
 
     public List<Employee> employeeList = new ArrayList<>();
     public Employee employee = new Employee();
@@ -66,15 +53,6 @@ public class EmployeeServiceTest {
 
         Assert.assertEquals(5, employeesList.size());
         Assert.assertEquals("Xiaoming", employeesList.get(0).getName());
-
-    }
-
-    @Test
-    public void shouldUpdateEmployee() {
-
-        EmployeeRepository mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
-        EmployeeService employeeService = new EmployeeService(mockEmployeeRepository);
-
 
     }
 

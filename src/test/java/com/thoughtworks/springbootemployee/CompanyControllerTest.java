@@ -48,9 +48,9 @@ public class CompanyControllerTest {
         List<Employee> companyOneEmployeeList = new ArrayList<>();
         List<Employee> companyTwoEmployeeList = new ArrayList<>();
 
-        companyOneEmployeeList.add(new Employee(null,null,4,"alibaba1", 20, commonUtils.MALE, 6000));
-        companyOneEmployeeList.add(new Employee(null,null,11,"tengxun2", 19, commonUtils.FEMALE, 7000));
-        companyTwoEmployeeList.add(new Employee(null,null,6,"alibaba3", 19, commonUtils.MALE, 8000));
+        companyOneEmployeeList.add(new Employee(null,4,"alibaba1", 20, commonUtils.MALE, 6000, null));
+        companyOneEmployeeList.add(new Employee(null,11,"tengxun2", 19, commonUtils.FEMALE, 7000, null));
+        companyTwoEmployeeList.add(new Employee(null,6,"alibaba3", 19, commonUtils.MALE, 8000, null));
 
         companyList.add(new Company("alibaba", 0,companyOneEmployeeList.size(),companyOneEmployeeList));
         companyList.add(new Company("tengxun", 1,companyOneEmployeeList.size(),companyTwoEmployeeList));

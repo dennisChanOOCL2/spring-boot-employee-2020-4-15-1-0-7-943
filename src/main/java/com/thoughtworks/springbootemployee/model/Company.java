@@ -14,13 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Company {
+
     private String companyName;
     private int employeesNumber;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int companyId;
 
-    @OneToMany(targetEntity = Employee.class, mappedBy = "companyId", fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, targetEntity = Employee.class, mappedBy = "companyId", fetch = FetchType.EAGER)
     private List<Employee> employeesList;
 
     public void updateCompany(Company updatedData){

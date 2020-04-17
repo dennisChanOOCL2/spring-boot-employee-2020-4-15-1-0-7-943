@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class ParkingBoy {
     private Integer id;
     private String nickname;
 
-    @OneToOne
-    @JoinColumn(name = "id")
+    @JsonIgnore
+    @OneToOne(mappedBy = "parkingBoy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Employee employee;
 }
