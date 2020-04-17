@@ -50,4 +50,16 @@ public class Company {
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
+
+    public void updateCompany(Company updatedData){
+        if(updatedData.getEmployeeList() != null){
+            this.setEmployeesNumber(employeeList.size());
+            this.setEmployeeList(employeeList);
+        }
+
+        if(updatedData.getCompanyName() != null){
+            this.setCompanyName(companyName);
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,21 +29,31 @@ public class CompanyService {
     }
 
     public List<Company> getAll(Integer page, Integer pageSize) {
-        return repository.findAll(page, pageSize);
+
+        List<Company> returnCompanyList = repository.findAll();
+
+        if(page != null && pageSize != null){
+            returnCompanyList = repository.findAllWithPaging(returnCompanyList, page, pageSize);
+        }
+
+        return returnCompanyList;
     }
 
     public Company createCompany(Company company) {
         return repository.addCompany(company);
     }
 
-    // direct update company
     public Company updateCompany(int companyId, String companyName, List<Employee> employeeList) {
         Company selectedCompany = repository.findCompanyByCompanyId(companyId);
         if(selectedCompany == null){
             return null;
         }
-    // add update method in Company
-        return repository.updateCompany(selectedCompany, companyName, employeeList);
+
+        Company updatedData = new Company();
+        updatedData.setCompanyName(companyName);
+        updatedData.setEmployeeList(employeeList);
+
+        return repository.updateCompany(selectedCompany, updatedData);
 
     }
 

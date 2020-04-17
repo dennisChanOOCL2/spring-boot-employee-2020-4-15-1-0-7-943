@@ -1,10 +1,27 @@
 package com.thoughtworks.springbootemployee.model;
 
-
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+
 public class Employee {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
     private Integer age;
     private String gender;
@@ -13,14 +30,14 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(int id, String name, int age, String gender){
+    public Employee(Integer id, String name, Integer age, String gender){
         this.id = id;
         this.name = name;
         this.age = age;
         this.gender = gender;
     }
 
-    public Employee(int id, String name, int age, String gender, int salary){
+    public Employee(Integer id, String name, Integer age, String gender, Integer salary){
         this.id = id;
         this.name = name;
         this.age = age;
@@ -32,7 +49,7 @@ public class Employee {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

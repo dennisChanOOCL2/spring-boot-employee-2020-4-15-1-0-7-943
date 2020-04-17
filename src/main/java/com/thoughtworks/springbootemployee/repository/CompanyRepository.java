@@ -36,17 +36,17 @@ public class CompanyRepository {
         return company.getEmployeeList();
     }
 
-    public List<Company> findAll(Integer page, Integer pageSize){
+    public List<Company> findAll(){
 
         List<Company> returnList = new ArrayList<>(companyList);
 
-        returnList = commonUtils.pagingForList(returnList, page, pageSize);
-        if(returnList == null){
-            return null;
-        }
-
         return returnList;
     }
+
+    public List<Company> findAllWithPaging(List<Company> companyList, Integer page, Integer pageSize){
+        return commonUtils.pagingForList(companyList, page, pageSize);
+    }
+
 
     public Company addCompany(Company companyToBeCreated) {
         if(findCompanyByCompanyId(companyToBeCreated.getCompanyId()) != null){
@@ -57,21 +57,9 @@ public class CompanyRepository {
         }
     }
 
-    public Company updateCompany(Company selectedCompany, String companyName, List<Employee> employeeList) {
+    public Company updateCompany(Company selectedCompany, Company updateDataCompany) {
 
-        if(selectedCompany == null){
-            return null;
-        }
-
-        if(employeeList != null){
-            selectedCompany.setEmployeesNumber(employeeList.size());
-            selectedCompany.setEmployeeList(employeeList);
-        }
-
-        if(companyName != null){
-            selectedCompany.setCompanyName(companyName);
-        }
-
+        selectedCompany.updateCompany(updateDataCompany);
         return selectedCompany;
     }
 

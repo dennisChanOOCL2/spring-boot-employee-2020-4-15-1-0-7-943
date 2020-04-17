@@ -3,10 +3,11 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -19,36 +20,33 @@ public class EmployeeService {
     }
 
     public List<Employee> getAll(Integer page, Integer pageSize, String gender){
-
-        List<Employee> returnList = repository.findAllEmployees();
+        
+        Pageable pageable = null;
 
         if(page != null && pageSize != null){
-            returnList = repository.findAllEmployeesWithPaging(page, pageSize);
+            pageable = PageRequest.of(page,pageSize);
         }
 
         if(gender != null){
-            returnList = returnList.stream()
-                    .filter(employee ->
-                            employee.getGender().toUpperCase().equals(gender.toUpperCase()))
-                    .collect(Collectors.toList());
-            if(returnList.size() == 0){
-                return null;
-            }
+            return repository.findAllByGender(gender, pageable);
         }
 
-        return returnList;
+        return repository.findAll(pageable).getContent();
     }
 
     public Employee getSpecificEmployee(int id){
-        return repository.findEmployeeById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public Employee createEmployee(Employee employee){
-        return repository.createEmployee(employee);
+        if(repository.findById(employee.getId()).orElse(null) != null){
+            return repository.save(employee);
+        }
+        return null;
     }
 
-    public Employee updateEmployee(int id, String name, Integer age, String gender, Integer salary) {
-        Employee selectedEmployee = repository.findEmployeeById(id);
+    public Employee updateEmployee(Integer id, String name, Integer age, String gender, Integer salary) {
+        Employee selectedEmployee = repository.findById(id).orElse(null);
         if(selectedEmployee == null){
             return null;
         }
@@ -59,20 +57,17 @@ public class EmployeeService {
         updateData.setAge(age);
         updateData.setGender(gender);
 
-        return repository.updateEmployee(selectedEmployee, updateData);
-
+        selectedEmployee.updateEmployee(updateData);
+        return repository.save(selectedEmployee);
 
     }
 
     public Employee removeEmployee(int id) {
-        Employee selectedEmployee = repository.findEmployeeById(id);
+        Employee selectedEmployee = repository.findById(id).orElse(null);
         if(selectedEmployee == null){
             return null;
         }
-        if (!repository.removeEmployee(selectedEmployee)){
-            return null;
-        }
+        repository.delete(selectedEmployee);
         return selectedEmployee;
-
     }
 }

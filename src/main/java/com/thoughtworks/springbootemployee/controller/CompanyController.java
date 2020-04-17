@@ -91,6 +91,10 @@ public class CompanyController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        Company updateDataCompany = new Company();
+        updateDataCompany.setCompanyName(companyName);
+        updateDataCompany.setEmployeeList(employeeList);
+
         return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
     }
 
