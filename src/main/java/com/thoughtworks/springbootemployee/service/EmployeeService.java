@@ -55,17 +55,11 @@ public class EmployeeService {
         return null;
     }
 
-    public Employee updateEmployee(Integer id, String name, Integer age, String gender, Integer salary) {
+    public Employee updateEmployee(Integer id, Employee updateData) {
         Employee selectedEmployee = repository.findById(id).orElse(null);
         if(selectedEmployee == null){
             return null;
         }
-
-        Employee updateData = new Employee();
-        updateData.setName(name);
-        updateData.setSalary(salary);
-        updateData.setAge(age);
-        updateData.setGender(gender);
 
         this.updateEmployee(selectedEmployee, updateData);
         return repository.save(selectedEmployee);
@@ -93,6 +87,9 @@ public class EmployeeService {
                     || updateData.getGender().toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
                 selectedEmployee.setGender(updateData.getGender());
             }
+        }
+        if(updateData.getCompanyId() != null){
+            selectedEmployee.setCompanyId(updateData.getCompanyId());
         }
         if(updateData.getSalary() != null){
             selectedEmployee.setSalary(updateData.getSalary());

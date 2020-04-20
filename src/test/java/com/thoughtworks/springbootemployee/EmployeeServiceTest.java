@@ -53,7 +53,10 @@ public class EmployeeServiceTest {
         employeeList.add(new Employee(null, 4,"Xiaoxia", 15, CommonUtils.FEMALE, 8000, null));
 
         employee.setId(1);
-        employee.setName("Xiaohong");
+        employee.setName("Xiaohong_Update");
+        employee.setCompanyId(1);
+        employee.setAge(19);
+        employee.setGender(CommonUtils.FEMALE);
 
     }
 
@@ -72,10 +75,8 @@ public class EmployeeServiceTest {
     @Test
     public void shouldUpdateEmployee() {
 
-        EmployeeRepository mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
-        EmployeeService employeeService = new EmployeeService(mockEmployeeRepository);
-
-
+        doReturn(employeeList.get(0)).when(employeeRepository).findById(1);
+        Employee newEmployee = employeeService.updateEmployee(1, employeeList.get(0));
     }
 
 //

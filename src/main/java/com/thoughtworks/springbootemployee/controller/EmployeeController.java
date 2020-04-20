@@ -63,12 +63,9 @@ public class EmployeeController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Employee> updateEmployee(@PathVariable int id,
-                                                   @RequestParam(required = false) String name,
-                                                   @RequestParam(required = false) Integer age,
-                                                   @RequestParam(required = false) String gender,
-                                                   @RequestParam(required = false) Integer salary){
+                                                   @RequestBody Employee updateData){
 
-        Employee employeeToBeUpdated = employeeService.updateEmployee(id, name, age, gender, salary);
+        Employee employeeToBeUpdated = employeeService.updateEmployee(id, updateData);
         if(employeeToBeUpdated == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
