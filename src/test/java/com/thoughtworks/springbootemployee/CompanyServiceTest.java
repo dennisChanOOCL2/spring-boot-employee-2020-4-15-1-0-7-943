@@ -39,7 +39,7 @@ public class CompanyServiceTest {
         employeeList.add(new Employee(null, 3,"Xiaogang", 16, CommonUtils.MALE, 8000, null));
         employeeList.add(new Employee(null, 4,"Xiaoxia", 15, CommonUtils.FEMALE, 8000, null));
 
-        employee.setId(1);
+        employee.setEmployeeId(1);
         employee.setName("Xiaohong");
 
     }
@@ -68,7 +68,7 @@ public class CompanyServiceTest {
 //        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 //
 //        Employee employee = response.getBody().as(Employee.class);
-//        Assert.assertEquals(1, employee.getId());
+//        Assert.assertEquals(1, employee.getEmployeeId());
 //        Assert.assertEquals("Xiaohong", employee.getName());
 //    }
 //
@@ -138,7 +138,7 @@ public class CompanyServiceTest {
 //        Employee employee = response.getBody().as(Employee.class);
 //
 //        Assert.assertEquals("Xiaohong",employee.getName());
-//        Assert.assertEquals(1, employee.getId());
+//        Assert.assertEquals(1, employee.getEmployeeId());
 //    }
 //
 //    @Test

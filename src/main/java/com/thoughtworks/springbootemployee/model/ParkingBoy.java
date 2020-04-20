@@ -20,10 +20,12 @@ public class ParkingBoy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer parkingBoyId;
     private String nickname;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "parkingBoy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "parkingBoyId", referencedColumnName = "packingBoyId")
     private Employee employee;
+
 }

@@ -5,7 +5,6 @@ import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import io.restassured.http.ContentType;
-import io.restassured.mapper.TypeRef;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.Assert;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +46,7 @@ public class EmployeeControllerTest {
         employeeList.add(new Employee(null, 3,"Xiaogang", 16, CommonUtils.MALE, 8000, null));
         employeeList.add(new Employee(null, 4,"Xiaoxia", 15, CommonUtils.FEMALE, 8000, null));
 
-        employee.setId(1);
+        employee.setEmployeeId(1);
         employee.setName("Xiaohong");
 
     }
@@ -129,7 +127,7 @@ public class EmployeeControllerTest {
     @Test
     public void shouldUpdateEmployee(){
 
-        doReturn(employee).when(employeeService).updateEmployee(1,"Xiaohong",null,null,null);
+        doReturn(employee).when(employeeService).updateEmployee(1,employee);
         MockMvcResponse response = RestAssuredMockMvc.given().contentType(ContentType.JSON)
                 .params("name","Xiaohong")
                 .when()

@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class EmployeeService {
     }
 
     public Employee createEmployee(Employee employee){
-        if(repository.findById(employee.getId()).orElse(null) == null){
+        if(repository.findById(employee.getEmployeeId()).orElse(null) == null){
             return repository.save(employee);
         }
         return null;
@@ -61,7 +60,7 @@ public class EmployeeService {
             return null;
         }
 
-        this.updateEmployee(selectedEmployee, updateData);
+        selectedEmployee.updateEmployee(updateData);
         return repository.save(selectedEmployee);
 
     }
@@ -75,24 +74,4 @@ public class EmployeeService {
         return selectedEmployee;
     }
 
-    private void updateEmployee(Employee selectedEmployee, Employee updateData){
-        if(updateData.getName() != null){
-            selectedEmployee.setName(updateData.getName());
-        }
-        if(updateData.getAge() != null){
-            selectedEmployee.setAge(updateData.getAge());
-        }
-        if(updateData.getGender() != null){
-            if(updateData.getGender().toUpperCase().equals(CommonUtils.MALE.toUpperCase())
-                    || updateData.getGender().toUpperCase().equals(CommonUtils.FEMALE.toUpperCase())){
-                selectedEmployee.setGender(updateData.getGender());
-            }
-        }
-        if(updateData.getCompanyId() != null){
-            selectedEmployee.setCompanyId(updateData.getCompanyId());
-        }
-        if(updateData.getSalary() != null){
-            selectedEmployee.setSalary(updateData.getSalary());
-        }
-    }
 }

@@ -1,32 +1,20 @@
 package com.thoughtworks.springbootemployee;
 
 import com.thoughtworks.springbootemployee.CommonTools.CommonUtils;
-import com.thoughtworks.springbootemployee.controller.EmployeeController;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
-import io.restassured.http.ContentType;
-import io.restassured.mapper.TypeRef;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -52,7 +40,7 @@ public class EmployeeServiceTest {
         employeeList.add(new Employee(null, 3,"Xiaogang", 16, CommonUtils.MALE, 8000, null));
         employeeList.add(new Employee(null, 4,"Xiaoxia", 15, CommonUtils.FEMALE, 8000, null));
 
-        employee.setId(1);
+        employee.setEmployeeId(1);
         employee.setName("Xiaohong_Update");
         employee.setCompanyId(1);
         employee.setAge(19);
@@ -91,7 +79,7 @@ public class EmployeeServiceTest {
 //        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 //
 //        Employee employee = response.getBody().as(Employee.class);
-//        Assert.assertEquals(1, employee.getId());
+//        Assert.assertEquals(1, employee.getEmployeeId());
 //        Assert.assertEquals("Xiaohong", employee.getName());
 //    }
 //
@@ -161,7 +149,7 @@ public class EmployeeServiceTest {
 //        Employee employee = response.getBody().as(Employee.class);
 //
 //        Assert.assertEquals("Xiaohong",employee.getName());
-//        Assert.assertEquals(1, employee.getId());
+//        Assert.assertEquals(1, employee.getEmployeeId());
 //    }
 //
 //    @Test

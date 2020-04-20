@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,11 +49,7 @@ public class CompanyService {
             return null;
         }
 
-        Company updatedData = new Company();
-        updatedData.setCompanyName(updateDataCompany.getCompanyName());
-        updatedData.setEmployeesList(updateDataCompany.getEmployeesList());
-
-        selectedCompany.updateCompany(updatedData);
+        selectedCompany.updateCompany(updateDataCompany);
 
         return repository.save(selectedCompany);
 
